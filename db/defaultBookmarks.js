@@ -1,4 +1,4 @@
-forformodule.exports = [
+module.exports = [
   {
     id: "8d59b070-cf4e-408b-90fd-efea6fba5a6f",
     type: "image",
