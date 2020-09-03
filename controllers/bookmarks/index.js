@@ -96,20 +96,27 @@ exports.createBookmark = async function (req, res, next) {
 
 exports.updateBookmark = async function (req, res, next) {
   const { body: bookmark } = req;
-
+  console.log("id ====> ", bookmark.id);
   const db = await low(adapter);
-  db.get("bookmarks")
-    .find({ id: bookmark.id })
-    .assign({
-      keywords: bookmark.keywords,
-      dateBookmarked: bookmark.dateBookmarked,
-    })
-    .write();
-  const updatedBookmarks = await queryBookmarksFormDb(req, res, next);
-  res.json({
-    error: false,
-    ...updatedBookmarks,
-  });
+  try {
+    db.get("bookmarks")
+      .find({ id: bookmark.id })
+      .assign({
+        keywords: bookmark.keywords,
+        dateBookmarked: bookmark.dateBookmarked,
+      })
+      .write();
+    const updatedBookmarks = await queryBookmarksFormDb(req, res, next);
+    res.json({
+      error: false,
+      ...updatedBookmarks,
+    });
+  } catch (error) {
+    res.json({
+      error: true,
+      message: `Error Updating bookmark : ${error}`,
+    });
+  }
 };
 
 exports.deleteBookmark = async function (req, res, next) {
