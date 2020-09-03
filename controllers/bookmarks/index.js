@@ -126,9 +126,21 @@ exports.deleteBookmark = async function (req, res, next) {
   await db.get("bookmarks").remove({ id }).write();
 
   const updatedBookmarks = await queryBookmarksFormDb(req, res, next);
-
-  res.json({
-    error: false,
-    ...updatedBookmarks,
-  });
+  console.log(updatedBookmarks);
+  if (updatedBookmarks.error) {
+    res.json({
+      error: false,
+      bookmarks: [],
+      pagination: {
+        pages: 1,
+        currentPage: 1,
+        perPage: 5,
+      },
+    });
+  } else {
+    res.json({
+      error: false,
+      ...updatedBookmarks,
+    });
+  }
 };
